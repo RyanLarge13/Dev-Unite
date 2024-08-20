@@ -7,10 +7,12 @@ import {
   SignedOut,
   UserButton,
 } from "@clerk/nextjs";
+import Nav from "@/components/Nav";
 
 export const metadata: Metadata = {
   title: "Dev Unite",
   description: "Build Software Together",
+  icons: ["/assets/logo.jpeg"],
 };
 
 export default function RootLayout({
@@ -22,6 +24,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body>
+          <Nav />
           <SignedOut>
             <SignInButton />
           </SignedOut>
