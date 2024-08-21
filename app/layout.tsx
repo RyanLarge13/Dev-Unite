@@ -1,12 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import {
-  ClerkProvider,
-  SignInButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from "@clerk/nextjs";
+import { ClerkProvider, SignInButton, SignedOut } from "@clerk/nextjs";
 import Nav from "@/components/Nav";
 
 export const metadata: Metadata = {
@@ -28,9 +22,6 @@ export default function RootLayout({
           <SignedOut>
             <SignInButton />
           </SignedOut>
-          <SignedIn>
-            <UserButton />
-          </SignedIn>
           {children}
         </body>
       </html>
