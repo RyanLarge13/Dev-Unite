@@ -11,27 +11,27 @@ const Categories = () => {
         </li>
         <li>
           <a href="/" className="p-5 hover:bg-orange-300 duration-200 block">
-            Connect
+            Find
           </a>
         </li>
         <li>
           <a href="/" className="p-5 hover:bg-orange-300 duration-200 block">
-            Connect
+            Newest
           </a>
         </li>
         <li>
           <a href="/" className="p-5 hover:bg-orange-300 duration-200 block">
-            Connect
+            Most Popular
           </a>
         </li>
         <li>
           <a href="/" className="p-5 hover:bg-orange-300 duration-200 block">
-            Connect
+            Open Join
           </a>
         </li>
         <li>
           <a href="/" className="p-5 hover:bg-orange-300 duration-200 block">
-            Connect
+            Levels
           </a>
         </li>
       </ul>

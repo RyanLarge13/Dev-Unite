@@ -10,7 +10,7 @@ const Nav = () => {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed top-0 right-0 left-0 flex justify-evenly gap-x-40 items-center p-5 bg-white">
+    <nav className="fixed top-0 right-0 left-0 flex justify-evenly gap-x-40 items-center p-5 bg-white z-40 shadow-lg">
       <div className="flex-1 flex justify-center items-center border-r border-r-slate-200">
         <Image src={Logo} alt="dev unite" width={30} height={30} className="" />
       </div>
