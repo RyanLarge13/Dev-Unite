@@ -15,28 +15,71 @@ datasource db {
 
 model User {
   id String @id @unique @default(uuid())
+  bio String
+  email String
+  github String
+  position String
+  avatarUrl String
+  displayName String
+  openGitHubProjects String[]
+  lookingForHelp Boolean @default(false)
+  lookingForProjects Boolean @default(true)
+  tags Tag[]
+  posts Post[]
+  projects Project[]
+  messages Message[]
+  categories Category[]
+  conversations Conversation[]
+  adminProjects Project[] @relation(name: "admin")
 }
 
 model Project {
   id String @id @unique @default(uuid())
+  adminId String 
+  conversationId String
+  tags Tag[]
+  users User[]
+  categories Category[]
+  conversation Conversation?
+  admin User @relation(name: "admin", fields: [adminId], references: [id])
 }
 
 model Category {
   id String @id @unique @default(uuid())
+  users User[]
+  projects Project[]
 }
 
 model Tag {
   id String @id @unique @default(uuid())
+  title String @unique
+  users User[]
+  projects Project[]
 }
 
 model Conversation {
   id String @id @unique @default(uuid())
+  projectId String @unique
+  users User[]
+  messages Message[]
+  project Project @relation(fields: [projectId], references: [id])
 }
 
 model Message {
   id String @id @unique @default(uuid())
+  userId String
+  convoId String
+  text String
+  time DateTime @default(now())
+  from User @relation(fields: [userId], references: [id])
+  conversation Conversation @relation(fields: [convoId], references: [id])
 }
 
-model Coworker {
+model Post {
   id String @id @unique @default(uuid())
+  userId String
+  markdown String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  user User @relation(fields: [userId], references: [id])
 }
