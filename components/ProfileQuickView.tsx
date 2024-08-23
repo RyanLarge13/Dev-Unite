@@ -3,8 +3,9 @@ import React from "react";
 import { FaPlus } from "react-icons/fa";
 import { SignedIn, UserButton } from "@clerk/nextjs";
 import defaultBanner from "@/public/assets/defaultBanner.jpg";
+import { User } from "@prisma/client";
 
-const ProfileQuickView = () => {
+const ProfileQuickView = ({ user }: { user: User }) => {
   return (
     <div className="rounded-3xl shadow-lg bg-white w-full pt-10 relative">
       <Image
@@ -23,8 +24,8 @@ const ProfileQuickView = () => {
               }}
             />
             <div className="ml-3 mt-10 text-sm">
-              <p className="font-semibold">Ryan Large</p>
-              <p>Software Engineer</p>
+              <p className="font-semibold">{user.displayName}</p>
+              <p>{user.position}</p>
             </div>
           </SignedIn>
         </div>

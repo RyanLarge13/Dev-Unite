@@ -12,6 +12,9 @@ import {
 } from "react-icons/fa";
 import { FaNoteSticky, FaPhotoFilm } from "react-icons/fa6";
 import Topics from "@/components/Topics";
+import { getDbUser } from "@/serverActions/userActions";
+import { redirect } from "next/navigation";
+import YouMayKnow from "@/components/YouMayKnow";
 
 const Home = async () => {
   const user = await currentUser();
@@ -20,12 +23,23 @@ const Home = async () => {
     return <p>Login</p>;
   }
 
+  const dbUser = await getDbUser(user.id);
+
+  if (dbUser.err) {
+    return <p>Something went wrong</p>;
+    //  redirect something went wrong page
+  }
+
+  if (!dbUser.user) {
+    return redirect("/setup");
+  }
+
   return (
     <main className="bg-[#efefef] min-h-screen px-40 pt-20 flex overflow-y-auto justify-center items-start gap-x-5">
       <div className="flex-[1_1_25%]">
-        <ProfileQuickView />
-        <Categories />
-        <Topics />
+        <ProfileQuickView user={dbUser.user} />
+        <Categories cats={dbUser.user.categories} />
+        <Topics tags={dbUser.user.tags} />
       </div>
       <div className="flex-[1_1_56%] min-h-screen max-h-screen overflow-y-auto">
         <div className="rounded-3xl shadow-lg bg-white w-full">
@@ -78,31 +92,7 @@ const Home = async () => {
             Try For Free
           </button>
         </div>
-        <div className="rounded-3xl shadow-lg bg-white w-full mt-5 overflow-hidden">
-          <div className="p-5">
-            <p className="font-semibold text-lg">Developers In Your Bracket:</p>
-            {
-              // devs.map()
-            }
-            <div className="flex justify-between items-center mt-5">
-              <div className="flex justify-center items-center gap-4">
-                <div className="bg-slate-400 w-10 h-10 flex justify-center items-center rounded-full">
-                  <p className="font-bold">RL</p>
-                </div>
-                <div>
-                  <p>Ryan Large</p>
-                  <p className="text-sm text-slate-300">Software Engineer</p>
-                </div>
-              </div>
-              <button className="outline-orange-300 outline rounded-lg py-1 px-3 hover:bg-orange-300 duration-200">
-                Connect
-              </button>
-            </div>
-          </div>
-          <button className="text-center text-sm p-5 hover:bg-orange-300 w-full duration-200 border-t border-t-slate-300">
-            See All
-          </button>
-        </div>
+        <YouMayKnow user={dbUser.user} />
         <div className="rounded-3xl shadow-lg bg-white w-full mt-5 overflow-hidden">
           <div className="p-5">
             <ul>

@@ -46,6 +46,7 @@ model Project {
 
 model Category {
   id String @id @unique @default(uuid())
+  title String @unique
   users User[]
   projects Project[]
 }
