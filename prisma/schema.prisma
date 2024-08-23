@@ -16,3 +16,27 @@ datasource db {
 model User {
   id String @id @unique @default(uuid())
 }
+
+model Project {
+  id String @id @unique @default(uuid())
+}
+
+model Category {
+  id String @id @unique @default(uuid())
+}
+
+model Tag {
+  id String @id @unique @default(uuid())
+}
+
+model Conversation {
+  id String @id @unique @default(uuid())
+}
+
+model Message {
+  id String @id @unique @default(uuid())
+}
+
+model Coworker {
+  id String @id @unique @default(uuid())
+}
