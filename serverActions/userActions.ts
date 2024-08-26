@@ -55,6 +55,13 @@ export const getRelatedDevs = async (user: User) => {
   return relatedDevs;
 };
 
-export const submitUserProfile = async () => {
-  console.log("submitting");
+export const submitUserProfile = async (data: FormData) => {
+  const newAvatar = data.get("avatar") as File;
+  const newUsername = data.get("username") as string;
+  const newEmail = data.get("email") as string;
+  const newGithub = data.get("github") as string;
+  const newPosition = data.get("position") as string;
+  const help = data.get("help") as string;
+  const looking = data.get("looking") as string;
+  const newBio = data.get("bio") as string;
 };

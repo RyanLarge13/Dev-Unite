@@ -48,7 +48,6 @@ const SetUpClient = ({ children }: { children: React.ReactNode[] }) => {
           Next
         </button>
       ) : null}
-      {page === children.length - 1 ? <button>Finish</button> : null}
     </section>
   );
 };
