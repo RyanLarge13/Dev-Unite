@@ -24,7 +24,7 @@ export default function RootLayout({
             <SignInButton />
           </SignedOut>
           {children}
-          <Messages />
+          {/* <Messages /> */}
         </body>
       </html>
     </ClerkProvider>

@@ -54,3 +54,7 @@ export const getRelatedDevs = async (user: User) => {
   });
   return relatedDevs;
 };
+
+export const submitUserProfile = async () => {
+  console.log("submitting");
+};

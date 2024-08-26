@@ -1,12 +1,134 @@
-import ProfileQuickView from "@/components/ProfileQuickView";
+import React from "react";
+import { currentUser, User } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
+import { FaPlus } from "react-icons/fa";
+import Image from "next/image";
 import SetUpClient from "@/components/SetUpClient";
 import UserSetupOptions from "@/components/UserSetupOptions";
-import { getDbUser } from "@/serverActions/userActions";
-import { currentUser } from "@clerk/nextjs/server";
-import Image from "next/image";
-import { redirect } from "next/navigation";
-import React from "react";
-import { FaFileUpload } from "react-icons/fa";
+import { submitUserProfile } from "@/serverActions/userActions";
+
+const SetUpAvatar = ({ clerkUser }: { clerkUser: User }) => {
+  return (
+    <div className="flex justify-center items-center flex-col relative">
+      <p className="text-2xl mb-10">
+        Change your avatar or keep your existing one!
+      </p>
+      <label htmlFor="avatar">
+        <Image
+          src={clerkUser.imageUrl}
+          alt="current avatar"
+          width={50}
+          height={50}
+          className="w-40 h-40 rounded-full cursor-pointer mt-10"
+        />
+        <FaPlus />
+        <input type="file" className="opacity-0 absolute inset-0" />
+      </label>
+    </div>
+  );
+};
+
+const SetUpUsername = ({ clerkUser }: { clerkUser: User }) => {
+  return (
+    <div className="flex justify-center items-center px-60 text-center">
+      <label htmlFor="username">
+        <p className="text-xl">
+          Set a unique display name that other users will be able to identify
+          you from and will be shown to the public
+        </p>
+        <input
+          id="username"
+          name="username"
+          type="username"
+          className="outline-none focus:outline-none rounded-lg w-full p-3 font-bold text-orange-60 mt-10"
+          placeholder={clerkUser.fullName || "No username set"}
+        />
+      </label>
+    </div>
+  );
+};
+
+const SetUpEmail = ({ clerkUser }: { clerkUser: User }) => {
+  return (
+    <div className="flex flex-col justify-center items-center px-60 text-center">
+      <label htmlFor="email">
+        <p className="text-xl">
+          What email do you want other users to contact you with to follow up on
+          projects?
+        </p>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          className="outline-none focus:outline-none p-3 w-full font-bold text-orange-600 mt-10 rounded-lg"
+          placeholder={
+            clerkUser.primaryEmailAddress?.emailAddress || "No email set"
+          }
+        />
+      </label>
+    </div>
+  );
+};
+
+const SetUpGithub = () => {
+  return (
+    <div className="flex flex-col justify-center items-center px-60 text-center">
+      <label htmlFor="github">
+        <p className="text-xl">
+          What github account do you want other users to see and find your
+          listed projects at?
+        </p>
+        <input
+          id="github"
+          name="github"
+          type="github"
+          className="outline-none focus:outline-none p-3 w-full font-bold text-orange-600 mt-10 rounded-lg"
+          placeholder={"Github profile"}
+        />
+      </label>
+    </div>
+  );
+};
+
+const SetUpPosition = () => {
+  return (
+    <div className="flex flex-col justify-center items-center px-60 text-center">
+      <label htmlFor="position">
+        <p className="text-xl mt-10">
+          What is your position? eg: software engineer, web developer... etc
+        </p>
+        <input
+          id="position"
+          name="position"
+          type="position"
+          className="outline-none focus:outline-none p-3 w-full font-bold text-orange-600"
+          placeholder={"Position"}
+        />
+      </label>
+    </div>
+  );
+};
+
+const SetUpBio = () => {
+  return (
+    <div className="flex flex-col justify-center items-center px-60 text-center">
+      <label htmlFor="bio">
+        <p className="text-xl mt-10">
+          Give your profile an about you section. Let people know who you are
+          and what you do
+        </p>
+        <textarea
+          name="bio"
+          id="bio"
+          className="outline-none shadow-md focus:outline-none w-full font-semibold p-5"
+          rows={10}
+          maxLength={1000}
+          placeholder="About you"
+        ></textarea>
+      </label>
+    </div>
+  );
+};
 
 const SetUp = async () => {
   const clerkUser = await currentUser();
@@ -17,94 +139,28 @@ const SetUp = async () => {
 
   return (
     <main className="pt-20 min-h-screen px-40">
-      <SetUpClient>
-        {[
-          <h1 className="font-semibold mb-10 text-4xl">
-            Let's finish setting up your account
-          </h1>,
-          <label htmlFor="avatar">
-            <div className="w-40 h-40 rounded-full flex justify-center items-center text-4xl bg-slate-400">
-              <FaFileUpload />
-            </div>
-            <Image
-              src={clerkUser.imageUrl}
-              alt="current avatar"
-              width={50}
-              height={50}
-              className="w-30 h-30 rounded-full"
-            />
-            <input type="file" className="opacity-0" />
-          </label>,
-          <label htmlFor="username">
-            <p className="text-xl">
-              Set a unique display name that other users will be able to
-              identify you from and will be shown to the public
-            </p>
-            <input
-              id="username"
-              name="username"
-              type="username"
-              className="outline-none focus:outline-none p-3 w-full font-bold text-orange-600"
-              placeholder={clerkUser.fullName || "No username set"}
-            />
-          </label>,
-          <label htmlFor="email">
-            <p className="text-xl mt-10">
-              What email do you want other users to contact you with to follow
-              up on projects?
-            </p>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              className="outline-none focus:outline-none p-3 w-full font-bold text-orange-600"
-              placeholder={
-                clerkUser.primaryEmailAddress?.emailAddress || "No email set"
-              }
-            />
-          </label>,
-          <label htmlFor="github">
-            <p className="text-xl mt-10">
-              What github account do you want other users to see and find your
-              listed projects at?
-            </p>
-            <input
-              id="github"
-              name="github"
-              type="github"
-              className="outline-none focus:outline-none p-3 w-full font-bold text-orange-600"
-              placeholder={"Github profile"}
-            />
-          </label>,
-          <label htmlFor="position">
-            <p className="text-xl mt-10">
-              What is your position? eg: software engineer, web developer... etc
-            </p>
-            <input
-              id="position"
-              name="position"
-              type="position"
-              className="outline-none focus:outline-none p-3 w-full font-bold text-orange-600"
-              placeholder={"Position"}
-            />
-          </label>,
-          <label htmlFor="bio">
-            <p className="text-xl mt-10">
-              Give your profile an about you section. Let people know who you
-              are and what you do
-            </p>
-            <textarea
-              name="bio"
-              id="bio"
-              className="outline-none shadow-md focus:outline-none w-full font-semibold p-5"
-              rows={10}
-              maxLength={1000}
-              placeholder="About you"
-            ></textarea>
-          </label>,
-          <UserSetupOptions />,
-        ]}
-      </SetUpClient>
+      <form action={submitUserProfile}>
+        <SetUpClient>
+          {[
+            <h1 className="font-semibold mb-10 text-4xl">
+              Let's finish setting up your account
+            </h1>,
+            <SetUpAvatar clerkUser={clerkUser} />,
+            <SetUpUsername clerkUser={clerkUser} />,
+            <SetUpEmail clerkUser={clerkUser} />,
+            <SetUpGithub />,
+            <SetUpPosition />,
+            <UserSetupOptions />,
+            <SetUpBio />,
+            <button
+              type="submit"
+              className="rounded-lg p-3 w-60 shadow-lg bg-sky-300"
+            >
+              Finish
+            </button>,
+          ]}
+        </SetUpClient>
+      </form>
     </main>
   );
 };
