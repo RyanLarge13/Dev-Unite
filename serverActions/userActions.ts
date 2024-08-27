@@ -1,4 +1,5 @@
 "use server";
+import { currentUser } from "@clerk/nextjs/server";
 import {
   Category,
   PrismaClient,
@@ -17,7 +18,7 @@ export const getDbUser = async (userId: string) => {
     };
   }
   const dbUser = await prisma.user.findUnique({
-    where: { id: userId },
+    where: { userId },
     include: { tags: true, categories: true, conversations: true },
   });
   if (!dbUser) {
@@ -56,12 +57,71 @@ export const getRelatedDevs = async (user: User) => {
 };
 
 export const submitUserProfile = async (data: FormData) => {
-  const newAvatar = data.get("avatar") as File;
-  const newUsername = data.get("username") as string;
-  const newEmail = data.get("email") as string;
+  const user = await currentUser();
+  if (!user) {
+    console.log("no user");
+    return false;
+  }
+  let newAvatar = data.get("avatar") as File | string;
+  let newEmail = data.get("email") as string;
+  let newUsername = data.get("username") as string;
   const newGithub = data.get("github") as string;
   const newPosition = data.get("position") as string;
   const help = data.get("help") as string;
   const looking = data.get("looking") as string;
   const newBio = data.get("bio") as string;
+  // console.log(
+  //   newAvatar,
+  //   newUsername,
+  //   newEmail,
+  //   newGithub,
+  //   newPosition,
+  //   help,
+  //   looking,
+  //   newBio
+  // );
+  if (newAvatar instanceof File) {
+    if (newAvatar.size === 0) {
+      newAvatar = user.imageUrl;
+    }
+    //upload to clerk then set new url for db
+  }
+  if (newAvatar instanceof String && !newAvatar) {
+    newAvatar = user.imageUrl;
+  }
+  if (!newEmail && !user.primaryEmailAddress?.emailAddress) {
+    console.log("no email from clerk");
+    return false;
+  }
+  if (!newEmail && user.primaryEmailAddress !== null) {
+    newEmail = user.primaryEmailAddress.emailAddress;
+  }
+  if (!newUsername && !user.fullName) {
+    console.log("no username from clerk");
+    return false;
+  }
+  if (!newUsername && user.fullName) {
+    newUsername = user.fullName;
+  }
+  if (!newUsername || !newEmail || !newGithub || !newPosition || !newBio) {
+    console.log("missing data");
+    return false;
+  }
+  const newUser = {
+    userId: user.id,
+    bio: newBio,
+    github: newGithub,
+    position: newPosition,
+    email: newEmail,
+    avatarUrl: newAvatar.toString(),
+    displayName: newUsername,
+    lookingForHelp: Boolean(help),
+    lookingForProjects: Boolean(looking),
+  };
+  const dbUser = await prisma.user.create({ data: newUser });
+  if (!dbUser) {
+    console.log("no db user");
+    return false;
+  }
+  return true;
 };
