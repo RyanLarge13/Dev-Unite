@@ -18,7 +18,7 @@ export const getDbUser = async (userId: string) => {
     };
   }
   const dbUser = await prisma.user.findUnique({
-    where: { userId },
+    where: { userId: userId },
     include: { tags: true, categories: true, conversations: true },
   });
   if (!dbUser) {

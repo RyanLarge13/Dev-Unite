@@ -61,13 +61,13 @@ const Nav = () => {
         </li>
         <li
           className={`${
-            pathname === "/bells"
+            pathname === "/notifications"
               ? "border-b-2 border-b-sky-300"
               : "border-none"
           } pb-3`}
         >
           <a
-            href="/"
+            href="/notifications"
             className={`${
               pathname === "/bells" ? "text-sky-300" : "text-black"
             }`}
@@ -83,7 +83,7 @@ const Nav = () => {
           } pb-3`}
         >
           <a
-            href="/"
+            href="/messages"
             className={`${
               pathname === "/messages" ? "text-sky-300" : "text-black"
             }`}
@@ -99,7 +99,7 @@ const Nav = () => {
           } pb-3`}
         >
           <a
-            href="/"
+            href="/profile"
             className={`${
               pathname === "/profile" ? "text-sky-300" : "text-black"
             }`}
