@@ -1,13 +1,7 @@
 "use server";
+import prismaClient from "@/lib/prismaClient";
 import { currentUser } from "@clerk/nextjs/server";
-import {
-  Category,
-  PrismaClient,
-  Tag,
-  User as UserWithTagsAndCats,
-} from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { Category, Tag, User as UserWithTagsAndCats } from "@prisma/client";
 
 export const getDbUser = async (userId: string) => {
   if (!userId) {
@@ -17,7 +11,7 @@ export const getDbUser = async (userId: string) => {
       user: null,
     };
   }
-  const dbUser = await prisma.user.findUnique({
+  const dbUser = await prismaClient.user.findUnique({
     where: { userId: userId },
     include: { tags: true, categories: true, conversations: true },
   });
@@ -43,7 +37,7 @@ interface User extends UserWithTagsAndCats {
 export const getRelatedDevs = async (user: User) => {
   const tagIds = user.tags.map((tag) => tag.id);
   const catTags = user.categories.map((cat) => cat.id);
-  const relatedDevs = await prisma.user.findMany({
+  const relatedDevs = await prismaClient.user.findMany({
     where: {
       AND: [{ id: { not: user.id } }],
       OR: [
@@ -118,10 +112,17 @@ export const submitUserProfile = async (data: FormData) => {
     lookingForHelp: Boolean(help),
     lookingForProjects: Boolean(looking),
   };
-  const dbUser = await prisma.user.create({ data: newUser });
+  const dbUser = await prismaClient.user.create({ data: newUser });
   if (!dbUser) {
     console.log("no db user");
     return false;
   }
   return true;
+};
+
+export const getAdminProjects = async (userId: string) => {
+  const projects = await prismaClient.project.findMany({
+    where: { adminId: userId },
+  });
+  return projects;
 };
