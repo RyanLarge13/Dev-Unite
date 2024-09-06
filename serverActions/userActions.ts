@@ -64,6 +64,7 @@ export const submitUserProfile = async (data: FormData) => {
   const help = data.get("help") as string;
   const looking = data.get("looking") as string;
   const newBio = data.get("bio") as string;
+  const newAbout = data.get("about") as string;
   // console.log(
   //   newAvatar,
   //   newUsername,
@@ -97,13 +98,21 @@ export const submitUserProfile = async (data: FormData) => {
   if (!newUsername && user.fullName) {
     newUsername = user.fullName;
   }
-  if (!newUsername || !newEmail || !newGithub || !newPosition || !newBio) {
+  if (
+    !newUsername ||
+    !newEmail ||
+    !newGithub ||
+    !newPosition ||
+    !newBio ||
+    !newAbout
+  ) {
     console.log("missing data");
     return false;
   }
   const newUser = {
     userId: user.id,
     bio: newBio,
+    about: newAbout,
     github: newGithub,
     position: newPosition,
     email: newEmail,

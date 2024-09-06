@@ -120,12 +120,34 @@ const SetUpBio = () => {
     <div className="flex flex-col justify-center my-20 items-center px-60 text-center">
       <label htmlFor="bio">
         <p className="text-xl">
-          Give your profile an about you section. Let people know who you are
+          Give your profile a simple introduction. Let people know who you are
           and what you do
         </p>
         <textarea
           name="bio"
           id="bio"
+          className="outline-none shadow-md focus:outline-none w-full font-semibold p-5 mt-10 rounded-lg"
+          rows={10}
+          maxLength={1000}
+          placeholder="About you"
+        ></textarea>
+      </label>
+    </div>
+  );
+};
+
+const SetupAbout = () => {
+  return (
+    <div className="flex flex-col justify-center my-20 items-center px-60 text-center">
+      <label htmlFor="about">
+        <p className="text-xl">
+          Write about you. You can include links to other websites, tell a story
+          or more in this section to let people understand who you are as a
+          programmer
+        </p>
+        <textarea
+          name="about"
+          id="about"
           className="outline-none shadow-md focus:outline-none w-full font-semibold p-5 mt-10 rounded-lg"
           rows={10}
           maxLength={1000}
@@ -159,6 +181,7 @@ const SetUp = async () => {
         <SetUpPosition />
         <UserSetupOptions />
         <SetUpBio />
+        <SetupAbout />
         <SubmitBtn
           text="Finish"
           styles="rounded-lg p-3 w-60 shadow-lg bg-sky-300 hover:bg-orange-300 duration-300"

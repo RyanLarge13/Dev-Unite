@@ -109,9 +109,19 @@ const Profile = async () => {
       </div>
       <div className="rounded-3xl shadow-lg bg-white w-full p-10 mt-5">
         <p className="text-xl font-semibold">About</p>
+        <p className="text-sm text-sky-300">{user.displayName}</p>
+        <div className="mt-2 bg-slate-100 p-5 rounded-lg">{user.about}</div>
       </div>
       <div className="rounded-3xl shadow-lg bg-white w-full p-10 mt-5">
         <p className="text-xl font-semibold">Current Projects</p>
+        <p className="font-semibold mt-3">Admin Projects</p>
+        <div className="mt-2 bg-slate-100 p-5 rounded-lg">
+          {adminProjects.length < 1 ? (
+            <p>You have no projects</p>
+          ) : (
+            adminProjects.map((adminProj) => <div key={adminProj.id}></div>)
+          )}
+        </div>
       </div>
       <div className="rounded-3xl shadow-lg bg-white w-full p-10 mt-5">
         <p className="text-xl font-semibold">
